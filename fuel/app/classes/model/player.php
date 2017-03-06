@@ -9,6 +9,7 @@ protected static $_properties = array(
         'id',
         'gems' => array(
             'data_type' => 'varchar'
-        )
+        ),
+        'score' => array('data_type' => 'varchar'),
     );
 }

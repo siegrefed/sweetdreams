@@ -18,6 +18,8 @@ public function post_buy()
         $rel_users_items->fk_items = $fk_items;
         // $rel_users_items->unidades = $unidades;
 
+        $items = new Model_Items();
+        $items = Model_Items::find('all', array('where' => array(array('id', $fk_items),)));
 
 		
         	if (empty($fk_items) or empty($fk_users))
@@ -28,8 +30,14 @@ public function post_buy()
         	{
         		try
         		{
-        			$rel_users_items->save();
-        			return $this->notice($code = 'SUCCESSFUL ACTION', $message = 'ITEM BOUGHT.');
+        			
+        				if(!empty($items)){
+
+		        			$rel_users_items->save();
+		        			return $this->notice($code = 'SUCCESSFUL ACTION', $message = 'ITEM BOUGHT.');
+		        		}
+		        		return $this->notice($code = 'ERROR', $message = 'THIS ITEM DOES NOT EXIST.');
+
         		}
         		catch(exception $e)
         		{
@@ -42,6 +50,7 @@ public function post_buy()
 
 	public function post_delete($fk_users = null, $fk_items = null)
 	{
+
 		try
 		{
 			if(isset($fk_items) and isset($fk_users))

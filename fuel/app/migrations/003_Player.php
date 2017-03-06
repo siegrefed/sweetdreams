@@ -8,6 +8,7 @@ class Player
 		\DBUtil::create_table('player',array(
 			'id' => array('type' => 'int', 'constraint' => 11, 'auto_increment' => true),
 			'gems' => array('type' => 'int', 'constraint' => 11, 'null'=>true),
+			'score' => array('type' => 'int', 'constraint' => 11),
 
 			), array('id'));
 	}

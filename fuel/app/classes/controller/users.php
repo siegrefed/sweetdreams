@@ -283,7 +283,7 @@ class Controller_Users extends Controller_Base
         		    $player = new Model_Player();
 
         			$player->gems = 0;
-
+        			$player->score = 0;
         			$player->save();
 
         			$user->fk_player = $player->id;
@@ -304,30 +304,78 @@ class Controller_Users extends Controller_Base
 
 //FUNCION MOSTRAR ITEMS DE USUARIOS (PARAMETROS REQUERIDOS: TOKEN)---------------------------------------------------------------
 
-//public function get_usersitems()
-//	 {
+public function get_usersitems()
+	 {
 	 	
-//	 		if($this->check())
-//	 		{
-//	 			$user = Model_Users::find('all');
-//	 			$user = Model_Users::find('all', array('where' => array(array('id', $id_users))));
+	 		if($this->check())
+	 		{
+	 			$user = Model_Users::find('all');
+	 			// $user = Model_Users::find('all', array('where' => array(array('id', $id_users))));
 
-//	 			$item = Model_Items::find('all');
-//	 			$item = Model_Items::find('all', array('where' => array(array('id', $id_items))));
+	 			$item = Model_Items::find('all');
+	 			// $item = Model_Items::find('all', array('where' => array(array('id', $id_items))));
 
-//	 			$relui = Model_RelUsersItems::find('all');
+	 			$relui = Model_RelUsersItems::find('all');
 
-//				return $relui,;
+	 			$array = [];
+                $arrayUsersItems = [];
+
+	 			//$relui2 = $relui["id"]; 
+	 			// foreach ($relui as $rel) {
+	 			// 	print($rel['fk_users']);
+	 			// }
+	 			// foreach ($user as $key => $value) {
+	 			// 	$playername = $user[$key];
+	 			// 	return $user[$key];
+	 				// foreach ($relui as $rels => $value) {
+	 				// 	if ($key['id'] == $rels['fk_users']){
+	 				// 		foreach ($item as $items => $value) {
+	 				// 			if($rels['fk_items'] == $items['id']){
+	 				// 				print($items['name']);
+	 				// 			}
+	 				// 		}
+	 				// 	}
+	 				// }
+	 			// }
+	 			// if ($user["id"] == $relui["fk_users"] and){
+
+	 			// }
+	 			foreach ($user as $player) 
+                {
+                    $array =  [];
+                    array_push($array, $player['username']);                                
+                    foreach ($item as $items)
+                    {
+                        foreach ($relui as $key ) 
+                        {
+	                        if($key['fk_items'] != ""){   
+	                           if ($key['fk_items'] == $items['id'] && $player['id'] == $key['fk_users']) 
+	                           {
+	                               array_push($array, $items['name']);
+	                           }
+	                        } 
+                        }
+                    }
+                    array_push($arrayUsersItems, $array);
+                }   
+                return $this->response  ([
+                                            $arrayUsersItems,
+                                        ]);
+
+
+				//return $relui2;
+				//print($user[$key]);
+				//return $user;
 	 			
-//	 		}
-//	 		else return $this->notice($code = 'ERROR', $message = 'REQUIRE AUTHENTICATION.');
+	 		}
+	 		else return $this->notice($code = 'ERROR', $message = 'REQUIRE AUTHENTICATION.');
 	 	
-//	 }
+	 }
 
 
 //FUNCION MOSTRAR ITEMS DE UN UNICO USUARIO (PARAMETROS REQUERIDOS: ID)----------------------------------------------------------
 
-	public function get_userItems($id_user = null)
+	public function get_useritems($id_user = null)
 	{
 		if(isset($id_user))
 		{
@@ -361,7 +409,7 @@ class Controller_Users extends Controller_Base
 								{
 									
 
-									return $relui;	
+									return Arr::reindex($relui);	
 								}
 
 							}
@@ -381,15 +429,61 @@ class Controller_Users extends Controller_Base
 
 
 
-	public function get_usersitems(){
-		if($this->check()){
-			
+	//FUNCION MOSTRAR LOGROS DE UN UNICO USUARIO (PARAM: ID)
+
+		public function get_userachievements($id = null)
+		{
+
+			if (isset($id))
+			{
+				if($this->check())
+				{
+					$achievements = new Model_Achievements();
+					$achievements = Model_Achievements::find('all', array('where' => array(array('fk_player', $id))));
+
+					if (!empty($achievements)){
+						return Arr::reindex($achievements);
+					}
+					else return $this->notice($code = 'ERROR', $message = 'USER HAS NOT ACHIEVEMENTS');
+
+				}
+
+			}
+			else return $this->notice($code = 'ERROR', $message = 'EXPECTED ID_USER IN URL.');
+
 		}
+	// //FUNCION MOSTRAR LOGROS DE TODOS LOS USUARIOS
+	// 	public function get_usersachievements(){
 
+	// 		if($this->check())
+	// 			{
+	// 				$achievements = new Model_Achievements();
+	// 				$achievements = Model_Achievements::find('all');
 
+	// 				$users = new Model_Users();
+	// 				$users = Model_Users::find('all');
+					
 
-	}
+	// 				if (!empty($achievements)){
+	// 					foreach ($users as $user => $value) 
+	// 					{
+	// 						$id = $user["id"];
+	// 						$username = $user["username"];
+							
+	// 						// foreach ($achievements as $key => $value) 
+	// 						// {
+	// 						// 	 var_dump($key);
+	// 						// 	if ($key["fk_users"] == $id)
+	// 						// 	{
+	// 						// 		return $key["name"];
+	// 						// 	}
+	// 						// }
+	// 					}
 
+	// 				}
+
+	// 			}
+	// 	}
 
 }
 

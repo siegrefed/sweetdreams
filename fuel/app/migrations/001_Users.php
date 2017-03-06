@@ -14,6 +14,7 @@ class Users
             'image' => array('type' => 'varchar', 'constraint' => 255, 'null'=>true),
             'fk_admin' => array('type' => 'int', 'constraint' => 11, 'null'=>true),
             'fk_player' => array('type' => 'int', 'constraint' => 11, 'null'=>true),
+            
         ), array('id'));
 
         \DB::query("ALTER TABLE `users` ADD UNIQUE(`email`)")->execute();
