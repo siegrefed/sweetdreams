@@ -427,6 +427,8 @@ public function get_usersitems()
 
 	}
 
+	
+
 
 
 	//FUNCION MOSTRAR LOGROS DE UN UNICO USUARIO (PARAM: ID)
